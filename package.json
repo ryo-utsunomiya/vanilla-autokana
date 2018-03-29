@@ -4,5 +4,9 @@
   "description": "A JavaScript library to complete furigana automatically.",
   "main": "index.js",
   "author": "Ryo Utsunomiya<millionsnowliving@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "^4.3.0",
+    "webpack-cli": "^2.0.13"
+  }
 }
