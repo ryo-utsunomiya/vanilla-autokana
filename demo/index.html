@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>vanilla-autokana DEMO</title>
+</head>
+<body>
+<form action="">
+    <div>
+        <label for="name">名前</label>
+        <input name="name" id="name">
+    </div>
+    <div>
+        <label for="furigana">ふりがな</label>
+        <input name="furigana" id="furigana">
+    </div>
+    <input type="submit" value="送信">
+</form>
+<script src="main.js"></script>
+<script>
+  AutoKana.bind('#name', '#furigana');
+</script>
+</body>
+</html>
