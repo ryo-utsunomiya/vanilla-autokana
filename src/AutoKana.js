@@ -1,45 +1,66 @@
 /**
- * Find element by id.
- * @param {String} id Element id.
- * @returns {HTMLElement | null}
+ * @param {string} str
+ * @param {string} chars
+ * @returns {string}
  */
-function findElement(id) {
-  if (id.indexOf('#') === 0) {
-    id = id.substr(1); // '#id' => 'id'
-  }
-  return document.getElementById(id);
+function ltrim(str, chars) {
+  // eslint-disable-next-line no-param-reassign
+  chars = !chars ? ' \\s\u00A0' : chars.replace(/([[\]().?/*{}+$^:])/g, '$1');
+
+  const re = new RegExp(`^[${chars}]+`, 'g');
+  return str.replace(re, '');
 }
 
+// eslint-disable-next-line no-irregular-whitespace
 const kanaExtractionPattern = /[^ 　ぁあ-んー]/g;
 const kanaCompactingPattern = /[ぁぃぅぇぉっゃゅょ]/g;
 
 export default class AutoKana {
+  /**
+   * @param {string} name
+   * @param {string} furigana
+   * @param {object} option
+   */
   constructor(name, furigana, option = {}) {
-    const elName = findElement(name);
-    const elFurigana = findElement(furigana);
+    const elName = document.getElementById(ltrim(name, '#'));
+    const elFurigana = document.getElementById(ltrim(furigana, '#'));
 
     if (!elName) throw new Error(`Element not found: ${name}`);
     if (!elFurigana) throw new Error(`Element not found: ${furigana}`);
 
     this.elName = elName;
     this.elFurigana = elFurigana;
-    this.option = Object.assign({}, { katakana: false }, option);
+    this.option = Object.assign(
+      {
+        katakana: false,
+        checkInterval: 30, // msec
+      },
+      option
+    );
     this.active = true;
-    this.clearInputValues();
     this.timer = null;
+    this.initializeValues();
     this.registerEvents();
   }
 
+  initializeValues() {
+    this.baseKana = '';
+    this.isConverting = false;
+    this.ignoreString = '';
+    this.input = '';
+    this.values = [];
+  }
+
   registerEvents() {
-    this.elName.addEventListener('blur', ev => {
+    this.elName.addEventListener('blur', () => {
       this.clearInterval();
     });
-    this.elName.addEventListener('focus', ev => {
+    this.elName.addEventListener('focus', () => {
       this.onInput();
       this.setInterval();
     });
-    this.elName.addEventListener('keydown', ev => {
-      if (this.flagConvert) {
+    this.elName.addEventListener('keydown', () => {
+      if (this.isConverting) {
         this.onInput();
       }
     });
@@ -62,17 +83,6 @@ export default class AutoKana {
     } else {
       this.active = !this.active;
     }
-  };
-
-  /**
-   * Clear input values.
-   */
-  clearInputValues() {
-    this.baseKana = '';
-    this.flagConvert = false;
-    this.ignoreString = '';
-    this.input = '';
-    this.values = [];
   }
 
   clearInterval() {
@@ -90,12 +100,14 @@ export default class AutoKana {
   }
 
   setKana(newValues) {
-    if (!this.flagConvert) {
+    if (!this.isConverting) {
       if (newValues) {
         this.values = newValues;
       }
       if (this.active) {
-        this.elFurigana.value = this.toKatakana(this.baseKana + this.values.join(''));
+        this.elFurigana.value = this.toKatakana(
+          this.baseKana + this.values.join('')
+        );
       }
     }
   }
@@ -103,42 +115,44 @@ export default class AutoKana {
   removeString(newInput) {
     if (newInput.indexOf(this.ignoreString) !== -1) {
       return newInput.replace(this.ignoreString, '');
-    } else {
-      const ignoreArray = this.ignoreString.split('');
-      const inputArray = newInput.split('');
-      for (let i = 0; i < ignoreArray.length; i += 1) {
-        if (ignoreArray[i] === inputArray[i]) {
-          inputArray[i] = '';
-        }
-      }
-      return inputArray;
     }
+    const ignoreArray = this.ignoreString.split('');
+    const inputArray = newInput.split('');
+    for (let i = 0; i < ignoreArray.length; i += 1) {
+      if (ignoreArray[i] === inputArray[i]) {
+        inputArray[i] = '';
+      }
+    }
+    return inputArray;
   }
 
   checkConvert(newValues) {
-    if (!this.flagConvert) {
+    if (!this.isConverting) {
       if (Math.abs(this.values.length - newValues.length) > 1) {
-        const tmpValues = newValues.join('').replace(kanaCompactingPattern, '').split('');
+        const tmpValues = newValues
+          .join('')
+          .replace(kanaCompactingPattern, '')
+          .split('');
         if (Math.abs(this.values.length - tmpValues.length) > 1) {
           this.onConvert();
         }
-      } else {
-        if (this.values.length === this.input.length && this.values.join('') !== this.input) {
-          if (input.match(kanaExtractionPattern)) {
-            this.onConvert();
-          }
+      } else if (
+        this.values.length === this.input.length &&
+        this.values.join('') !== this.input
+      ) {
+        if (this.input.match(kanaExtractionPattern)) {
+          this.onConvert();
         }
       }
     }
   }
 
   checkValue() {
-    if (!this.elName) return;
     let newInput;
     newInput = this.elName.value;
 
     if (newInput === '') {
-      this.clearInputValues();
+      this.initializeValues();
       this.setKana();
     } else {
       newInput = this.removeString(newInput);
@@ -147,7 +161,7 @@ export default class AutoKana {
 
       this.input = newInput;
 
-      if (!this.flagConvert) {
+      if (!this.isConverting) {
         const newValues = newInput.replace(kanaExtractionPattern, '').split('');
         this.checkConvert(newValues);
         this.setKana(newValues);
@@ -156,18 +170,21 @@ export default class AutoKana {
   }
 
   setInterval() {
-    this.timer = setInterval(this.checkValue.bind(this), 30); // todo: interval should be option
+    this.timer = setInterval(
+      this.checkValue.bind(this),
+      this.option.checkInterval
+    );
   }
 
   onInput() {
     this.baseKana = this.elFurigana.value;
-    this.flagConvert = false;
+    this.isConverting = false;
     this.ignoreString = this.elName.value;
   }
 
   onConvert() {
     this.baseKana = this.baseKana + this.values.join('');
-    this.flagConvert = true;
+    this.isConverting = true;
     this.values = [];
   }
 }
