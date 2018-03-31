@@ -99,16 +99,16 @@ export default class AutoKana {
     return src;
   }
 
-  setKana(newValues) {
-    if (!this.isConverting) {
-      if (newValues) {
-        this.values = newValues;
-      }
-      if (this.active) {
-        this.elFurigana.value = this.toKatakana(
-          this.baseKana + this.values.join('')
-        );
-      }
+  setFurigana(newValues) {
+    if (this.isConverting) return;
+
+    if (newValues) {
+      this.values = newValues;
+    }
+    if (this.active) {
+      this.elFurigana.value = this.toKatakana(
+        this.baseKana + this.values.join('')
+      );
     }
   }
 
@@ -127,22 +127,22 @@ export default class AutoKana {
   }
 
   checkConvert(newValues) {
-    if (!this.isConverting) {
-      if (Math.abs(this.values.length - newValues.length) > 1) {
-        const tmpValues = newValues
-          .join('')
-          .replace(kanaCompactingPattern, '')
-          .split('');
-        if (Math.abs(this.values.length - tmpValues.length) > 1) {
-          this.onConvert();
-        }
-      } else if (
-        this.values.length === this.input.length &&
-        this.values.join('') !== this.input
-      ) {
-        if (this.input.match(kanaExtractionPattern)) {
-          this.onConvert();
-        }
+    if (this.isConverting) return;
+
+    if (Math.abs(this.values.length - newValues.length) > 1) {
+      const tmpValues = newValues
+        .join('')
+        .replace(kanaCompactingPattern, '')
+        .split('');
+      if (Math.abs(this.values.length - tmpValues.length) > 1) {
+        this.onConvert();
+      }
+    } else if (
+      this.values.length === this.input.length &&
+      this.values.join('') !== this.input
+    ) {
+      if (this.input.match(kanaExtractionPattern)) {
+        this.onConvert();
       }
     }
   }
@@ -153,7 +153,7 @@ export default class AutoKana {
 
     if (newInput === '') {
       this.initializeValues();
-      this.setKana();
+      this.setFurigana();
     } else {
       newInput = this.removeString(newInput);
 
@@ -164,7 +164,7 @@ export default class AutoKana {
       if (!this.isConverting) {
         const newValues = newInput.replace(kanaExtractionPattern, '').split('');
         this.checkConvert(newValues);
-        this.setKana(newValues);
+        this.setFurigana(newValues);
       }
     }
   }
