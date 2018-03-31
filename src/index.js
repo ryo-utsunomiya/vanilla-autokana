@@ -1,4 +1,4 @@
-import AutoKana from './autoKana';
+import AutoKana from './AutoKana';
 
 /**
  * Bind elements to AutoKana.
