@@ -33,7 +33,8 @@ export default class AutoKana {
     this.option = Object.assign(
       {
         katakana: false,
-        checkInterval: 30, // msec
+        debug: false,
+        checkInterval: 30, // milli seconds
       },
       option
     );
@@ -53,13 +54,16 @@ export default class AutoKana {
 
   registerEvents() {
     this.elName.addEventListener('blur', () => {
+      this.debug('blur');
       this.clearInterval();
     });
     this.elName.addEventListener('focus', () => {
+      this.debug('focus');
       this.onInput();
       this.setInterval();
     });
     this.elName.addEventListener('keydown', () => {
+      this.debug('keydown');
       if (this.isConverting) {
         this.onInput();
       }
@@ -114,7 +118,7 @@ export default class AutoKana {
 
   removeString(newInput) {
     if (newInput.indexOf(this.ignoreString) !== -1) {
-      return newInput.replace(this.ignoreString, '');
+      return String(newInput).replace(this.ignoreString, '');
     }
     const ignoreArray = this.ignoreString.split('');
     const inputArray = newInput.split('');
@@ -157,16 +161,18 @@ export default class AutoKana {
     } else {
       newInput = this.removeString(newInput);
 
-      if (this.input === newInput) return;
+      if (this.input === newInput) return; // no changes
 
       this.input = newInput;
 
-      if (!this.isConverting) {
-        const newValues = newInput.replace(kanaExtractionPattern, '').split('');
-        this.checkConvert(newValues);
-        this.setFurigana(newValues);
-      }
+      if (this.isConverting) return;
+
+      const newValues = newInput.replace(kanaExtractionPattern, '').split('');
+      this.checkConvert(newValues);
+      this.setFurigana(newValues);
     }
+
+    this.debug(this.input);
   }
 
   setInterval() {
@@ -186,5 +192,12 @@ export default class AutoKana {
     this.baseKana = this.baseKana + this.values.join('');
     this.isConverting = true;
     this.values = [];
+  }
+
+  debug(...args) {
+    if (this.option.debug) {
+      // eslint-disable-next-line no-console
+      console.log(...args);
+    }
   }
 }

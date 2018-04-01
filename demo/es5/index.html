@@ -2,7 +2,8 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>vanilla-autokana DEMO</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>vanilla-autokana ES5 DEMO</title>
 </head>
 <body>
 <form action="">
@@ -16,9 +17,9 @@
     </div>
     <input type="submit" value="送信">
 </form>
-<script src="autoKana.js"></script>
+<script src="autokana.js"></script>
 <script>
-  AutoKana.bind('#name', '#furigana');
+  AutoKana.bind("#name", "#furigana", { debug: true });
 </script>
 </body>
 </html>

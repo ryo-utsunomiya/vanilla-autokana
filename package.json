@@ -3,16 +3,18 @@
   "version": "0.0.1",
   "description": "A JavaScript library to complete furigana automatically.",
   "main": "src/index.js",
-  "author": "Ryo Utsunomiya<millionsnowliving@gmail.com>",
+  "author": "Ryo Utsunomiya <millionsnowliving@gmail.com>",
   "license": "MIT",
   "scripts": {
     "build": "webpack",
+    "watch": "webpack --watch",
     "lint": "eslint src"
   },
   "dependencies": {},
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
     "eslint": "^4.19.1",

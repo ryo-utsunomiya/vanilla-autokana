@@ -1,7 +1,7 @@
 module.exports = {
   mode: 'production',
   output: {
-    filename: 'autoKana.js',
+    filename: 'autokana.js',
     library: 'AutoKana',
     libraryTarget: 'umd',
   },
@@ -10,6 +10,7 @@ module.exports = {
       {
         test: /\.js$/,
         use: 'babel-loader',
+        exclude: /node_modules/,
       },
     ],
   },
