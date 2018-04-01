@@ -1,1 +1,1 @@
-dist/autokana.js
+autokana.js

@@ -17,9 +17,11 @@
     </div>
     <input type="submit" value="送信">
 </form>
-<script src="autokana.js"></script>
+<script src="autokana.js" defer></script>
 <script>
-  AutoKana.bind("#name", "#furigana", { debug: true });
+  document.addEventListener("DOMContentLoaded", function() {
+    AutoKana.bind("#name", "#furigana", { debug: true });
+  });
 </script>
 </body>
 </html>

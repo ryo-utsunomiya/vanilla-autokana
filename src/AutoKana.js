@@ -22,14 +22,10 @@ export default class AutoKana {
    * @param {object} option
    */
   constructor(name, furigana, option = {}) {
-    const elName = document.getElementById(ltrim(name, '#'));
-    const elFurigana = document.getElementById(ltrim(furigana, '#'));
+    this.isActive = true;
+    this.timer = null;
+    this.initializeValues();
 
-    if (!elName) throw new Error(`Element not found: ${name}`);
-    if (!elFurigana) throw new Error(`Element not found: ${furigana}`);
-
-    this.elName = elName;
-    this.elFurigana = elFurigana;
     this.option = Object.assign(
       {
         katakana: false,
@@ -38,10 +34,17 @@ export default class AutoKana {
       },
       option
     );
-    this.active = true;
-    this.timer = null;
-    this.initializeValues();
-    this.registerEvents();
+
+    // todo: Should hook DOMContentLoaded here?
+    const elName = document.getElementById(ltrim(name, '#'));
+    const elFurigana = document.getElementById(ltrim(furigana, '#'));
+
+    if (!elName) throw new Error(`Element not found: ${name}`);
+    if (!elFurigana) throw new Error(`Element not found: ${furigana}`);
+
+    this.elName = elName;
+    this.elFurigana = elFurigana;
+    this.registerEvents(this.elName);
   }
 
   initializeValues() {
@@ -52,17 +55,17 @@ export default class AutoKana {
     this.values = [];
   }
 
-  registerEvents() {
-    this.elName.addEventListener('blur', () => {
+  registerEvents(elName) {
+    elName.addEventListener('blur', () => {
       this.debug('blur');
       this.clearInterval();
     });
-    this.elName.addEventListener('focus', () => {
+    elName.addEventListener('focus', () => {
       this.debug('focus');
       this.onInput();
       this.setInterval();
     });
-    this.elName.addEventListener('keydown', () => {
+    elName.addEventListener('keydown', () => {
       this.debug('keydown');
       if (this.isConverting) {
         this.onInput();
@@ -71,21 +74,21 @@ export default class AutoKana {
   }
 
   start() {
-    this.active = true;
+    this.isActive = true;
   }
 
   stop() {
-    this.active = false;
+    this.isActive = false;
   }
 
   toggle(event) {
     if (event) {
       const el = Event.element(event);
       if (el) {
-        this.active = el.checked;
+        this.isActive = el.checked;
       }
     } else {
-      this.active = !this.active;
+      this.isActive = !this.isActive;
     }
   }
 
@@ -109,7 +112,7 @@ export default class AutoKana {
     if (newValues) {
       this.values = newValues;
     }
-    if (this.active) {
+    if (this.isActive) {
       this.elFurigana.value = this.toKatakana(
         this.baseKana + this.values.join('')
       );
