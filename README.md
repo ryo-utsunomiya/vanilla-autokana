@@ -1,6 +1,6 @@
 # vanilla-autokana
 
-[English README is here](https://github.com/ryo-utsunomiya/vanilla-autokana/README_en.md)
+[English README is here](https://github.com/ryo-utsunomiya/vanilla-autokana/blob/master/README_en.md)
 
 :warning: このライブラリはベータ版です。本番環境では使用しないでください。
 
