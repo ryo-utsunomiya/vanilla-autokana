@@ -43,7 +43,7 @@ Coming soon(npm installできるようにします)
 
 ### モジュールとしてimportする
 
-ESModulesとしてimportすることができます。使用方法はES5と同様です。
+ESModulesとしてimportすることができます。
 
 ```
 import * as AutoKana from 'autokana';
