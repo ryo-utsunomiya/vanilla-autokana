@@ -11,6 +11,15 @@ function ltrim(str, chars) {
   return str.replace(re, '');
 }
 
+/**
+ * @param {Number} char
+ * @returns {boolean}
+ */
+function isHiragana(char) {
+  const c = Number(char);
+  return (c >= 12353 && c <= 12435) || c === 12445 || c === 12446;
+}
+
 // eslint-disable-next-line no-irregular-whitespace
 const kanaExtractionPattern = /[^ 　ぁあ-んー]/g;
 const kanaCompactingPattern = /[ぁぃぅぇぉっゃゅょ]/g;
@@ -32,7 +41,7 @@ export default class AutoKana {
         debug: false,
         checkInterval: 30, // milli seconds
       },
-      option
+      option,
     );
 
     // todo: Should hook DOMContentLoaded here?
@@ -100,8 +109,17 @@ export default class AutoKana {
 
   toKatakana(src) {
     if (this.option.katakana) {
-      // todo: Convert to katakana
-      return src;
+      let c;
+      let str;
+      for (let i = 0; i < src.length; i += 1) {
+        c = src.charCodeAt(i);
+        if (isHiragana(c)) {
+          str += String.fromCharCode(c + 96);
+        } else {
+          str += src.charAt(i);
+        }
+      }
+      return str;
     }
     return src;
   }
@@ -114,7 +132,7 @@ export default class AutoKana {
     }
     if (this.isActive) {
       this.elFurigana.value = this.toKatakana(
-        this.baseKana + this.values.join('')
+        this.baseKana + this.values.join(''),
       );
     }
   }
@@ -181,7 +199,7 @@ export default class AutoKana {
   setInterval() {
     this.timer = setInterval(
       this.checkValue.bind(this),
-      this.option.checkInterval
+      this.option.checkInterval,
     );
   }
 
