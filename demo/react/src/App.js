@@ -12,7 +12,6 @@ class App extends Component {
       furigana: '',
     };
     this.handleNameInput = this.handleNameInput.bind(this);
-    this.autokana = undefined;
   }
   componentDidMount() {
     autokana = AutoKana.bind('#name', '#furigana');
