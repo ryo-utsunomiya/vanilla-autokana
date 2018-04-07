@@ -10,7 +10,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "vanilla-autokana": "^0.0.2",
+    "vanilla-autokana": "^0.2.1",
     "vue": "^2.5.2"
   },
   "devDependencies": {
