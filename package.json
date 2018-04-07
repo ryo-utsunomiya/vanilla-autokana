@@ -2,7 +2,7 @@
   "name": "vanilla-autokana",
   "version": "0.0.1",
   "description": "A JavaScript library to complete furigana automatically.",
-  "main": "src/index.js",
+  "main": "dist/autokana.js",
   "author": "Ryo Utsunomiya <millionsnowliving@gmail.com>",
   "license": "MIT",
   "scripts": {
