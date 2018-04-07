@@ -44,7 +44,6 @@ export default class AutoKana {
       option,
     );
 
-    // todo: Should hook DOMContentLoaded here?
     const elName = document.getElementById(ltrim(name, '#'));
     const elFurigana = document.getElementById(ltrim(furigana, '#'));
 
@@ -56,6 +55,46 @@ export default class AutoKana {
     this.registerEvents(this.elName);
   }
 
+  /**
+   * Get kana.
+   * @returns {string|*}
+   */
+  getKana() {
+    return this.baseKana;
+  }
+
+  /**
+   * Start watching.
+   */
+  start() {
+    this.isActive = true;
+  }
+
+  /**
+   * Stop watching.
+   */
+  stop() {
+    this.isActive = false;
+  }
+
+  /**
+   * Toggle watch status.
+   * @param event
+   */
+  toggle(event) {
+    if (event) {
+      const el = Event.element(event);
+      if (el) {
+        this.isActive = el.checked;
+      }
+    } else {
+      this.isActive = !this.isActive;
+    }
+  }
+
+  /**
+   * @private
+   */
   initializeValues() {
     this.baseKana = '';
     this.isConverting = false;
@@ -64,6 +103,11 @@ export default class AutoKana {
     this.values = [];
   }
 
+  /**
+   * Register events to element of name.
+   * @param {HTMLElement} elName
+   * @private
+   */
   registerEvents(elName) {
     elName.addEventListener('blur', () => {
       this.debug('blur');
@@ -82,31 +126,20 @@ export default class AutoKana {
     });
   }
 
-  start() {
-    this.isActive = true;
-  }
-
-  stop() {
-    this.isActive = false;
-  }
-
-  toggle(event) {
-    if (event) {
-      const el = Event.element(event);
-      if (el) {
-        this.isActive = el.checked;
-      }
-    } else {
-      this.isActive = !this.isActive;
-    }
-  }
-
+  /**
+   * @private
+   */
   clearInterval() {
     if (this.timer) {
       clearInterval(this.timer);
     }
   }
 
+  /**
+   * @private
+   * @param src
+   * @returns {*}
+   */
   toKatakana(src) {
     if (this.option.katakana) {
       let c;
@@ -124,6 +157,10 @@ export default class AutoKana {
     return src;
   }
 
+  /**
+   * @private
+   * @param newValues
+   */
   setFurigana(newValues) {
     if (this.isConverting) return;
 
@@ -137,6 +174,11 @@ export default class AutoKana {
     }
   }
 
+  /**
+   * @private
+   * @param newInput
+   * @returns {*}
+   */
   removeString(newInput) {
     if (newInput.indexOf(this.ignoreString) !== -1) {
       return String(newInput).replace(this.ignoreString, '');
@@ -151,6 +193,10 @@ export default class AutoKana {
     return inputArray;
   }
 
+  /**
+   * @private
+   * @param newValues
+   */
   checkConvert(newValues) {
     if (this.isConverting) return;
 
@@ -172,6 +218,10 @@ export default class AutoKana {
     }
   }
 
+  /**
+   * Checks form value and set furigana.
+   * @private
+   */
   checkValue() {
     let newInput;
     newInput = this.elName.value;
@@ -196,6 +246,9 @@ export default class AutoKana {
     this.debug(this.input);
   }
 
+  /**
+   * @private
+   */
   setInterval() {
     this.timer = setInterval(
       this.checkValue.bind(this),
@@ -203,18 +256,28 @@ export default class AutoKana {
     );
   }
 
+  /**
+   * @private
+   */
   onInput() {
     this.baseKana = this.elFurigana.value;
     this.isConverting = false;
     this.ignoreString = this.elName.value;
   }
 
+  /**
+   * @private
+   */
   onConvert() {
     this.baseKana = this.baseKana + this.values.join('');
     this.isConverting = true;
     this.values = [];
   }
 
+  /**
+   * @private
+   * @param args
+   */
   debug(...args) {
     if (this.option.debug) {
       // eslint-disable-next-line no-console
