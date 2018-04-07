@@ -13,14 +13,15 @@
 
 ## インストール方法
 
-### ES.Next
+### npm
 
-Coming soon(npm installできるようにします)
+```
+npm i vanilla-autokana # or yarn add vanilla-autokana
+```
 
-### ES5
+### npmを使わない方法
 
-このリポジトリの dist/autokana.js をダウンロードし、scriptタグで読み込んでください。
-
+このリポジトリの `dist/autokana.js` をダウンロードし、scriptタグで読み込んでください。
 
 ## 使用方法
 
@@ -46,10 +47,19 @@ Coming soon(npm installできるようにします)
 ESModulesとしてimportすることができます。
 
 ```
-import * as AutoKana from 'autokana';
+import * as AutoKana from 'vanilla-autokana';
 
 AutoKana.bind('#name', '#furigana');
 ```
+
+### Vue.jsで使用する
+
+`v-model`を使用している場合、input要素のvalue属性への値のセットは動作しません。
+[Vue.jsでの使用例](https://github.com/ryo-utsunomiya/vanilla-autokana/blob/master/demo/vue/src/App.vue)を参考に、名前フィールドのinputイベントで、`AutoKana.getFurigana()`メソッドでふりがなを取得し、Vueのリアクティブプロパティに反映させることをおすすめします。
+
+### React.jsで使用する
+
+TBD
 
 ## ライセンス
 

@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     handleNameInput() {
-      this.furigana = autokana.getKana();
+      this.furigana = autokana.getFurigana();
     }
   }
 }

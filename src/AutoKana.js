@@ -59,8 +59,8 @@ export default class AutoKana {
    * Get kana.
    * @returns {string|*}
    */
-  getKana() {
-    return this.baseKana;
+  getFurigana() {
+    return this.furigana;
   }
 
   /**
@@ -97,6 +97,7 @@ export default class AutoKana {
    */
   initializeValues() {
     this.baseKana = '';
+    this.furigana = '';
     this.isConverting = false;
     this.ignoreString = '';
     this.input = '';
@@ -168,9 +169,8 @@ export default class AutoKana {
       this.values = newValues;
     }
     if (this.isActive) {
-      this.elFurigana.value = this.toKatakana(
-        this.baseKana + this.values.join(''),
-      );
+      this.furigana = this.toKatakana(this.baseKana + this.values.join(''));
+      this.elFurigana.value = this.furigana;
     }
   }
 
