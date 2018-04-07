@@ -2,14 +2,12 @@
 
 [English README is here](https://github.com/ryo-utsunomiya/vanilla-autokana/blob/master/README_en.md)
 
-:warning: このライブラリはベータ版です。本番環境では使用しないでください。
-
 フォームのフィールドに文字を入力すると、別のフィールドにかなを自動入力するライブラリです。
 
 ## 特徴
 
 - jQueryに依存していません
-- UMD形式で書き出されており、scriptタグからの読み込みとモジュールのimportに対応しています
+- scriptタグからの読み込みとESModulesのimportに対応しています
 
 ## インストール方法
 
@@ -52,14 +50,14 @@ import * as AutoKana from 'vanilla-autokana';
 AutoKana.bind('#name', '#furigana');
 ```
 
-### Vue.jsで使用する
+### Vue.jsと組み合わせる
 
 `v-model`を使用している場合、input要素のvalue属性への値のセットは動作しません。
 [Vue.jsでの使用例](https://github.com/ryo-utsunomiya/vanilla-autokana/blob/master/demo/vue/src/App.vue)を参考に、名前フィールドのinputイベントで、`AutoKana.getFurigana()`メソッドでふりがなを取得し、Vueのリアクティブプロパティに反映させることをおすすめします。
 
-### React.jsで使用する
+### React.jsと組み合わせる
 
-TBD
+[React.jsでの使用例](https://github.com/ryo-utsunomiya/vanilla-autokana/blob/master/demo/react/src/App.js)を参考にしてください。
 
 ## ライセンス
 
