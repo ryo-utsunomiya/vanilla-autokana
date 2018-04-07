@@ -30,7 +30,7 @@ export default class AutoKana {
    * @param {string} furigana
    * @param {object} option
    */
-  constructor(name, furigana, option = {}) {
+  constructor(name, furigana = '', option = {}) {
     this.isActive = true;
     this.timer = null;
     this.initializeValues();
@@ -48,11 +48,14 @@ export default class AutoKana {
     const elFurigana = document.getElementById(ltrim(furigana, '#'));
 
     if (!elName) throw new Error(`Element not found: ${name}`);
-    if (!elFurigana) throw new Error(`Element not found: ${furigana}`);
 
     this.elName = elName;
-    this.elFurigana = elFurigana;
     this.registerEvents(this.elName);
+
+    // furigana is optional
+    if (elFurigana) {
+      this.elFurigana = elFurigana;
+    }
   }
 
   /**
@@ -170,7 +173,9 @@ export default class AutoKana {
     }
     if (this.isActive) {
       this.furigana = this.toKatakana(this.baseKana + this.values.join(''));
-      this.elFurigana.value = this.furigana;
+      if (this.elFurigana) {
+        this.elFurigana.value = this.furigana;
+      }
     }
   }
 
@@ -260,7 +265,9 @@ export default class AutoKana {
    * @private
    */
   onInput() {
-    this.baseKana = this.elFurigana.value;
+    if (this.elFurigana) {
+      this.baseKana = this.elFurigana.value;
+    }
     this.isConverting = false;
     this.ignoreString = this.elName.value;
   }
