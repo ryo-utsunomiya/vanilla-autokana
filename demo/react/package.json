@@ -6,7 +6,7 @@
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
     "react-scripts": "1.1.4",
-    "vanilla-autokana": "^0.2.0"
+    "vanilla-autokana": "^1.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
