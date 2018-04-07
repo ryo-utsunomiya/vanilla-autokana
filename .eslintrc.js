@@ -1,6 +1,3 @@
-const fs = require('fs');
-const prettierConfig = JSON.parse(fs.readFileSync('./.prettierrc', 'utf8'));
-
 module.exports = {
   extends: [
     'airbnb-base',
@@ -10,7 +7,7 @@ module.exports = {
     'prettier',
   ],
   rules: {
-    'prettier/prettier': ['error', prettierConfig]
+    'prettier/prettier': ['error']
   },
   env: {
     browser: true,
