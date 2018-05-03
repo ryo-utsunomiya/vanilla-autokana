@@ -195,7 +195,7 @@ export default class AutoKana {
         inputArray[i] = '';
       }
     }
-    return inputArray;
+    return inputArray.join('');
   }
 
   /**
