@@ -147,7 +147,7 @@ export default class AutoKana {
   toKatakana(src) {
     if (this.option.katakana) {
       let c;
-      let str;
+      let str = '';
       for (let i = 0; i < src.length; i += 1) {
         c = src.charCodeAt(i);
         if (isHiragana(c)) {
