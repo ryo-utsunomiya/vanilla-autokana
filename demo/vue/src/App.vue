@@ -15,25 +15,25 @@
 </template>
 
 <script>
-import * as AutoKana from 'vanilla-autokana';
+  import * as AutoKana from 'vanilla-autokana';
 
-let autokana;
+  let autokana;
 
-export default {
-  name: 'App',
-  data() {
-    return {
-      name: '',
-      furigana: '',
-    }
-  },
-  mounted() {
-    autokana = AutoKana.bind('#name', '#furigana');
-  },
-  methods: {
-    handleNameInput() {
-      this.furigana = autokana.getFurigana();
+  export default {
+    name: 'App',
+    data() {
+      return {
+        name: '',
+        furigana: '',
+      }
+    },
+    mounted() {
+      autokana = AutoKana.bind('#name', '#furigana');
+    },
+    methods: {
+      handleNameInput() {
+        this.furigana = autokana.getFurigana();
+      }
     }
   }
-}
 </script>
