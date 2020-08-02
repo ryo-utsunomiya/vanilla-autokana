@@ -13,11 +13,11 @@ test('init', () => {
 
 test('init with pass elements', () => {
   document.body.innerHTML = `
-<input name="name" id="name">
-<input name="furigana" id="furigana">
+<input name="name">
+<input name="furigana">
 `;
-  const name = document.getElementById('name')
-  const furigana = document.getElementById('furigana')
+  const name = document.querySelector('[name=name]')
+  const furigana = document.querySelector('[name=furigana]')
   const autokana = new AutoKana(name, furigana);
   autokana.start();
   expect(autokana.isActive).toBe(true);
