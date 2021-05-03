@@ -20,6 +20,20 @@ function isHiragana(char) {
   return (c >= 12353 && c <= 12435) || c === 12445 || c === 12446;
 }
 
+function isString(val) {
+  return typeof val === 'string' || val instanceof String;
+}
+
+function ensureElement(idOrElement) {
+  if (isString(idOrElement)) {
+    return document.getElementById(ltrim(idOrElement, '#'));
+  }
+  if (idOrElement instanceof Element) {
+    return idOrElement;
+  }
+  return null;
+}
+
 // eslint-disable-next-line no-irregular-whitespace
 const kanaExtractionPattern = /[^ 　ぁあ-んー]/g;
 const kanaCompactingPattern = /[ぁぃぅぇぉっゃゅょ]/g;
@@ -44,8 +58,8 @@ export default class AutoKana {
       option,
     );
 
-    const elName = document.getElementById(ltrim(name, '#'));
-    const elFurigana = document.getElementById(ltrim(furigana, '#'));
+    const elName = ensureElement(name);
+    const elFurigana = ensureElement(furigana);
 
     if (!elName) throw new Error(`Element not found: ${name}`);
 
